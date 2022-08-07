@@ -86,4 +86,39 @@ Vec3f trace(const Vec3f &rayorig, const Vec3f &raydir, const std::vector<Sphere>
         surfaceColor = (reflection * fresneleffect + 
         refraction * (1 - fresneleffect) * sphere->transparency) * sphere->surfaceColor;
     }
+
+    else 
+    {
+        // It's a diffuse object, no need to raytrace any further
+        for (unsigned i = 0; i < spheres.size(); ++i) 
+        {
+            if (spheres[i].emissionColor.x > 0) 
+            {
+                // This is a light
+                Vec3f transmission = 1;
+                Vec3f lightDirection = spheres[i].center - phit;
+                
+                lightDirection.normalize();
+
+                for (unsigned j = 0; j < spheres.size(); ++j) 
+                {
+                    if (i != j) 
+                    {
+                        float t0, t1;
+
+                        if (spheres[j].intersect(phit + nhit * bias, lightDirection, t0, t1)) 
+                        {
+                            transmission = 0;
+                            break;
+                        }
+                    }
+                }
+
+                surfaceColor += sphere->surfaceColor * transmission * std::max(float(0), nhit.dot(lightDirection)) * 
+                spheres[i].emissionColor;
+            }
+        }
+    }
+    
+    return surfaceColor + sphere->emissionColor;
 }
