@@ -1,6 +1,6 @@
 # Ray Tracer
 
-Ray tracing algorithim that renders spheres, creates 3D images, and writes to a Portable Pixmap Format (PPM) file. Developed with C++ and CMake.
+Ray tracing algorithm that renders spheres, creates 3D images, and writes to a Portable Pixmap Format (PPM) file. Developed with C++ and CMake.
 
 ## Getting Started
 
